@@ -1,0 +1,121 @@
+---
+layout: post
+title:  "jQuery抽象方法追踪（1）"
+date:   2016-02-18 17:15:33 +0800
+categories: jQuery
+---
+[w3school例1][w3school]jQuery使用方法如下
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript" src="/jquery/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$("button").click(function(){
+$("p").hide();
+});
+});
+</script>
+</head>
+<body>
+<h2>This is a heading</h2>
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+<button type="button">Click me</button>
+</body>
+</html> 
+{% endhighlight %}
+替换上一篇最终代码后如下：
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript">
+$(document).ready(function(){
+$("button").click(function(){
+$("p").hide();
+});
+});
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}
+			this.click = function(callback) {
+				for(var i in this) {
+				  this[i].onclick = callback;
+				}
+			} 			
+		} else {
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+			this.hide = function() {
+				this[0].style.display = "none";
+			}
+		}
+	}
+}
+</script>
+</head>
+<body>
+<p>If you click on me, I will disappear.</p>
+</body>
+</html>
+{% endhighlight %}
+可以发现，jQuery标签选择对象缺少hide方法，增加后最终代码如下：
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript">
+$(document).ready(function(){
+$("button").click(function(){
+$("p").hide();
+});
+});
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}
+			this.click = function(callback) {
+				for(var i in this) {
+					//初始版本不严谨，应该处理key是数字字符串的属性
+					if(!isNaN(i)) {
+				    	this[i].onclick = callback;
+				    }
+				}
+			}
+			//都是批量设置DOM对象属性，应该可以进一步抽象
+			this.hide = function() {
+				for(var i in this) {
+					if(!isNaN(i)) {
+						this[i].style.display = "none";
+					}   
+				}				
+			}			
+		} else {
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+			this.hide = function() {
+				this[0].style.display = "none";
+			}
+		}
+	}
+}
+</script>
+</head>
+<body>
+<p>If you click on me, I will disappear.</p>
+</body>
+</html>
+{% endhighlight %}
+[w3school]: http://www.w3school.com.cn/jquery/jquery_intro.asp

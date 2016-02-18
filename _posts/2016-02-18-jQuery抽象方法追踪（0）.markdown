@@ -148,9 +148,3 @@ function $(selector) {
 </html>
 {% endhighlight %}
 [w3school]: http://www.w3school.com.cn/jquery/
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
-
-
-
-
