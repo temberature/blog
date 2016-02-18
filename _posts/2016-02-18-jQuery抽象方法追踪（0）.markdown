@@ -2,7 +2,7 @@
 layout: post
 title:  "jQuery抽象方法追踪（0）"
 date:   2016-02-18 15:30:33 +0800
-categories: jekyll update
+categories: jQuery
 ---
 [w3school][w3school]最简单的jQuery使用方法如下
 {% highlight html %}
