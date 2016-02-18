@@ -4,8 +4,7 @@ title:  "jQuery抽象方法追踪（0）"
 date:   2016-02-18 15:30:33 +0800
 categories: jekyll update
 ---
-
-
+[w3school][w3school]最简单的jQuery使用方法如下
 {% highlight html %}
 <html>
 <head>
@@ -18,16 +17,140 @@ $(document).ready(function(){
 });
 </script>
 </head>
-
 <body>
 <p>If you click on me, I will disappear.</p>
 </body>
-
 </html> 
 {% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: http://jekyllrb.com/docs/home
+如果使用原生js，如下
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', domReadyHandler);
+function domReadyHandler() {
+	var nodes = document.getElementsByTagName("p");
+	for(var i=0; i<nodes.length; i++) {
+		nodes[i].onclick = function() {
+			this.style.display = "none";
+		};
+	}
+}
+</script>
+</head>
+<body>
+<p>If you click on me, I will disappear.</p>
+</body>
+</html>
+{% endhighlight %}
+抽象分为数据抽象、过程抽象，网页最基本的处理对象便是DOM对象，jQuery使用了$作为入口函数，传入选择标示，如`document`，`"p"`，`this`，返回基于DOM对象构造后的对象，结构如下：
+{% highlight javascript %}
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {...}
+}
+{% endhighlight %}
+因为`document,this`直接就是DOM对象，`"p"`是字符串，所以要分情况构造：
+{% highlight javascript %}
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			//...
+		} else {
+			//...
+		}
+	}
+}
+{% endhighlight %}
+然后将DOM对象找到绑定到构造后的对象上
+{% highlight javascript %}
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}
+		} else {
+			this[0] = selector;
+		}
+	}
+}
+{% endhighlight %}
+然后绑定相应的处理函数
+{% highlight javascript %}
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}
+			this.click = function(callback) {
+				for(var i in this) {
+				  this[i].onclick = callback;
+				}
+			} 			
+		} else {
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+			this.hide = function() {
+				this[0].style.display = "none";
+			}
+		}
+	}
+}
+{% endhighlight %}
+最终代码如下：
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("p").click(function(){
+  $(this).hide();
+  });
+});
+function $(selector) {
+	return new makeQ(selector);
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}
+			this.click = function(callback) {
+				for(var i in this) {
+				  this[i].onclick = callback;
+				}
+			} 			
+		} else {
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+			this.hide = function() {
+				this[0].style.display = "none";
+			}
+		}
+	}
+}
+</script>
+</head>
+<body>
+<p>If you click on me, I will disappear.</p>
+</body>
+</html>
+{% endhighlight %}
+[w3school]: http://www.w3school.com.cn/jquery/
 [jekyll-gh]:   https://github.com/jekyll/jekyll
 [jekyll-talk]: https://talk.jekyllrb.com/
+
+
+
+
