@@ -50,7 +50,7 @@ function $(selector) {
 	function makeQ(selector) {...}
 }
 {% endhighlight %}
-因为`document,this`直接就是DOM对象，`"p"`是字符串，所以要分情况构造：
+因为`document,this`直接就是DOM对象，`"p"`是字符串，所以要分情况构造（工厂模式），：
 {% highlight javascript %}
 function $(selector) {
 	return new makeQ(selector);
