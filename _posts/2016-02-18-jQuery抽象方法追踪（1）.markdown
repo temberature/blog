@@ -118,4 +118,7 @@ function $(selector) {
 </body>
 </html>
 {% endhighlight %}
+update:2015-2-19
+利用原型对象重写见下一篇。
+
 [w3school]: http://www.w3school.com.cn/jquery/jquery_intro.asp

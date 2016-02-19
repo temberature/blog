@@ -147,4 +147,56 @@ function $(selector) {
 </body>
 </html>
 {% endhighlight %}
+update:2015-2-19
+因为`makeQ`构造是同类对象，所以方法应该绑定在原型对象上，同时内存中也减少了重复的方法，修改后的代码如下：
+{% highlight html %}
+<html>
+<head>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("p").click(function(){
+  $(this).hide();
+  });
+});
+function $(selector) {
+	function makeQ(selector) {
+		if(typeof selector === "string") {
+			var nodes = document.getElementsByTagName(selector);
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}			
+		} else if(selector === document){
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+		} else {
+			this[0] = selector;
+		}
+	}
+	makeQ.prototype = {
+		click:function(callback) {
+				for(var i in this) {
+					if(!isNaN(i)) {
+					    this[i].onclick = callback;						
+					}
+				}
+			},
+		hide:function() {
+				for(var i in this) {
+					if(!isNaN(i)) {
+						this[i].style.display = "none";						
+					}
+				}				
+			}
+	}
+	return new makeQ(selector);
+}
+</script>
+</head>
+<body>
+<p>If you click on me, I will disappear.</p>
+</body>
+</html>
+{% endhighlight %}
 [w3school]: http://www.w3school.com.cn/jquery/
