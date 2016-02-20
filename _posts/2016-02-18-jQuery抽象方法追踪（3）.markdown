@@ -1,0 +1,111 @@
+---
+layout: post
+title:  "jQuery抽象方法追踪（3）"
+date:   2016-02-20 13:17:33 +0800
+categories: jQuery
+---
+[w3school例3][w3school]jQuery中ajax的实现
+{% highlight html %}
+<!DOCTYPE html>
+<html>
+<head>
+<script src="/jquery/jquery-1.11.1.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $('#test').load('/example/jquery/demo_test.txt');
+  })
+})
+</script>
+</head>
+<body>
+<h3 id="test">请点击下面的按钮，通过 jQuery AJAX 改变这段文本。</h3>
+<button id="btn1" type="button">获得外部的内容</button>
+</body>
+</html>
+{% endhighlight %}
+最终代码后如下：
+{% highlight html %}
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+$(document).ready(function(){
+  $("#btn1").click(function(){
+    $('#test').load('demo_test.txt');
+  })
+})
+function $(selector) {
+	function makeQ(selector) {
+		var nodes = {};
+		//应该写个匹配css选择器的正则
+		if(typeof selector === "string") {
+			if(selector[0] === "#") {
+				this[0] = document.getElementById(selector.substr(1));
+			} else if(selector[0] === ".") {
+				nodes = document.getElementsByClassName(selector.substr(1));
+			} else {
+				nodes = document.getElementsByTagName(selector);			
+			}
+			for(var i=0; i< nodes.length; i++) {
+				this[i] = nodes[i];
+			}			
+		} else if(selector === document){
+			this[0] = selector;
+			this.ready = function(callback) {
+				this[0].addEventListener('DOMContentLoaded', callback);
+			}
+		} else {
+			this[0] = selector;			
+		}
+	}
+	makeQ.prototype = {
+		click:function(callback) {
+				this._each("onclick", callback);
+			},
+		hide:function() {
+				this.css("display", "none");				
+			},
+		load:function(url) {
+			var xmlhttp=new XMLHttpRequest();
+			xmlhttp.onreadystatechange = ajaxHandler.bind(this);
+			xmlhttp.open("GET",url,true);
+			xmlhttp.send(null);
+			function ajaxHandler() {
+				if (xmlhttp.readyState==4) {// 4 = "loaded"
+					if (xmlhttp.status==200) {// 200 = "OK"
+						this._each("innerHTML",xmlhttp.responseText);
+					} else {
+						alert("Problem retrieving data:" + xmlhttp.statusText);
+					}
+				}				
+			}
+		},
+		_each:function(attr, value) {
+				for(var i in this) {
+					if(!isNaN(i)) {
+						this[i][attr] = value;
+					}   
+				}			
+		},
+		css:function(attr, val) {
+				for(var i in this) {
+					if(!isNaN(i)) {
+						this[i].style[attr] = val;
+					}   
+				}			
+		}
+	}
+	return new makeQ(selector);
+}
+</script>
+</head>
+<body>
+<h3 id="test">请点击下面的按钮，通过 jQuery AJAX 改变这段文本。</h3>
+<button id="btn1" type="button">获得外部的内容</button>
+</body>
+</html>
+{% endhighlight %}
+
+[w3school]: http://www.w3school.com.cn/jquery/jquery_ajax_intro.asp
