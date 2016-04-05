@@ -1,0 +1,24 @@
+---
+layout: post
+title:  "base标签兼容性"
+date:   2016-04-05 13:44:33 +0800
+categories: 兼容性
+---
+[IE][IE]
+[W3C][W3C]
+
+在HTML中表现一致。
+在JavaScript中，Chrome生效，IE不生效，需要获取。
+{% highlight html %}
+<script type="text/javascript">
+function GetBase()
+{
+    var oBaseColl = document.all.tags('BASE');
+    return ( (oBaseColl && oBaseColl.length) ? oBaseColl[0].href : 
+        null );
+}
+</script>
+{% endhighlight %}
+
+[IE]: https://msdn.microsoft.com/en-us/library/ms535191(v=vs.85).aspx
+[W3C]: https://www.w3.org/TR/html4/struct/links.html#h-12.4
