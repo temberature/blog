@@ -10,7 +10,7 @@ title: 抽象 分类 异同
 email: temberature@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   编程技术分享为主，偏前端、javaScript
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/blog" # the subpath of your site, e.g. /blog
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: tiandatong
 github_username:  temberature
