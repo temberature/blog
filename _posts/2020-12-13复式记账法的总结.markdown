@@ -1,0 +1,70 @@
+# [[为什么要记账]]?
+通过更好的理解自己的钱，更好的了解自己
+- 我的钱从哪来？（收入、负债）
+- 我的钱在哪、去哪了？（资产、费用）
+- 合计（收益）
+---
+- [[收入]]Income：已经是你的钱，工资（Salary）、奖金（Bonus）等。
+- [[负债]]Liabilities：要还的钱，抵押 (Mortgage)、信用卡 (Credit Cards)、房贷 (house loans)、车贷 (car loans) 等。
+- [[资产]]Assets：钱躺在哪个账户，现金 (Cash)、银行存款（Deposits）、基金（Funds）、债券（Bonds), 股票（Stocks） 等
+- [[费用]]Expenses：税金 (Taxes)、外出就餐、购物、旅行、Gift given、捐款 (Donations) 等。
+- [[收益]]
+
+# [[如何记账]]
+常见的[[流水账]]：[[收入]]、[[支出]]、[[负债]]、[[资产]]（包括现金）记在一个账本里。
+
+| 日期  | 备注         | 超市卡 |
+| ----- | ------------ | -----: |
+|        | 期初余额     |  200   |
+| 11.18 | 超市买巧克力 |  -30   |
+|        | 结余         |  170   |
+
+## [[流水账的缺点]]
+在纸质时代不便于统计，也就不能清晰的看到自己的几种账目的状况。
+
+深入了解：[[单式记账]]
+# 为什么要用复式记账?
+*（刚开始不太理解没关系，有动力学习了理解个大概就能试用软件Learning by Doing，复式记账也是伴随着资本主义的实践演变成熟的。）*
+## [[复式记账]] Double-entry bookkeeping
+[[借贷记账法]]有借必有贷，借贷必相等
+把[[收入]]、[[支出]]、[[负债]]、[[资产]]记到不同的账本里（凡事皆账户account，会计专业术语里叫会计科目），然后再有个合计的账本。
+
+[[资产]]（Assets）+ [[费用]]Expenses = [[负债]]（Liabilities） + [[收益]]Owner's Equity + [[收入]]Income
+左边是钱的去处，右边是钱的来源
+
+你赚的钱（Income），加上你借来的钱（Liabilities），最终要么变成你自己的钱（Assets），要么就是花掉了（Expenses），最终得到的是个零。这就是人的一辈子……
+
+| 日期  | 备注         | 超市卡 | 现金 | 食品 | 生活用品 |
+| ----- | ------------ | -----: | ---: | ---: | -------: |
+|       | 期初余额     |  200   |  100 |      |          |
+| 11.18 | 超市买巧克力 |  -30   |      |   30 |          |
+| 11.19 | 超市买香皂   |        |   -5 |      |    5     |
+
+深入了解：[[会计恒等式]]
+
+基于此也可以生成各种报表，「[[损益表]]income statement」和「[[资产负债表]]balance sheet」、現金流量表、試算平衡表等。
+
+# 软件实践
+[[ledger-cli]]是文本复式记账软件的开创者，这里更推荐类似的软件[[Beancount]]。
+优点如下：
+- Python 实现，更轻便，更方便增加插件和二次开发，也增加了很多功能，如灵活强大的多「货币」支持
+- 開源
+- 基於文本的語法
+- 個人擁有全部的數據
+- 完整的命令行工具鏈
+- 可視化工具fava
+- 基於SQL的查詢
+- 報表生成
+- 沒有預先定義的類別（可以用来记录包括货币在内任何东西（通货 commodity）的变化，比如年假天数、股票、航空里程、信用卡积分，当然了，还可以用来数豆子。）
+
+可以看出复式记账法的核心在于分类，使用中，你可能会遇到各种难以分类的情况，记住“除了最基本的會計恆等式之外，複式記賬只有規範，沒有對錯。”。
+[通过Beancount导入支付宝&微信csv账单](http://lidongchao.com/2018/07/20/has_header_in_csv_Sniffer/)
+
+- [[Beancount使用经验 - 李东潮的博客 | LeeDC Blog]] [Beancount使用经验 - 李东潮的博客 | LeeDC Blog](http://lidongchao.com/2018/07/20/has_header_in_csv_Sniffer/)
+- [[从单式记账到复式记账 | 日光漫想]] [从单式记账到复式记账 | 日光漫想](https://www.sundialdreams.com/from-single-entry-to-double-entry-accounting/)
+- [[复式记账Verne in GitHub]] [复式记账 | Verne in GitHub](http://einverne.github.io/post/2019/11/double-entry-bookkeeping.html)
+- [[Plain Text Accounting, a guide to Ledger and friends - plaintextaccounting.org]] [Plain Text Accounting, a guide to Ledger and friends - plaintextaccounting.org](https://plaintextaccounting.org/#comparisons)
+- [[ledger, a powerful command-line accounting system]] [ledger, a powerful command-line accounting system](https://www.ledger-cli.org/)
+- [[Peter Selinger: Tutorial on multiple currency accounting]] [Peter Selinger: Tutorial on multiple currency accounting](https://www.mathstat.dal.ca/~selinger/accounting/tutorial.html)
+- [[Beancount —— 命令行复式簿记 | wzyboy’s blog]] [Beancount —— 命令行复式簿记 | wzyboy’s blog](https://wzyboy.im/post/1063.html)
+- [[Beancount複式記賬（一）：爲什麼]] [Beancount複式記賬（一）：爲什麼](https://byvoid.com/zht/blog/beancount-bookkeeping-1/)
